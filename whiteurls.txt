@@ -7834,7 +7834,9 @@ ipv6.google.com
 .dpsco-my.sharepoint.com
 .dpx.airpr.com
 .dropbox.com
+.Dropbox.com
 .dropboxusercontent.com
+.dropitto.me
 .dsi.ut-capitole.fr
 .d.v.dropbox.com
 .e10.whatsapp.net

@@ -6,19 +6,19 @@
 
 [Blackweb] (http://www.maravento.com/p/blacklistweb.html) is a project that aims to collect as many public domain blacklists (to block porn, downloads, drugs, malware, spyware, trackers, Bots, social networks, warez, arms sales, etc.), in order to unify them and make them compatible with [Squid-Cache] (http://www.squid-cache.org/) (Tested in v3.5.x ). To do this, we perform a debugging of urls, to avoid duplicates, invalid domains (validation, ccTLD, ccSLD, sTLD, uTLD, gSLD, gTLD, etc), and filter with white lists of domains (false positives such as google , hotmail, yahoo, etc.), and get a mega ACL, optimized for [Squid-Cache] (http://www.squid-cache.org/), free of overlapping domains (eg: "ERROR: '.sub.example.com' is a subdomain of '.example.com'").
 
-### Descripción/Description
+### Descripción / Description
 
 |File|BL Domains|
 |----|----------|
-|blackweb.txt|5.019.312|
+|blackweb.txt|5.019.565|
 
-### Dependencias/Dependencies
+### Dependencias / Dependencies
 
 ```
 git squid bash tar zip wget
 ```
 
-### Modo de uso (manual)/How to use (manual)
+### Modo de uso (manual) / How to use (manual)
 
 La ACL blackweb.txt ya viene optimizada para Squid, por tanto puede descargar solamente el archivo blackweb.tar.gz, descomprimirlo y ubicar la ACL en el directorio de su preferencia y activar la regla de Squid para su uso / The ACL blackweb.txt is already optimized for Squid, so you can download only the file blackweb.tar.gz, unzip it and locate the ACL in the directory of your preference and activate the Squid rule for your use
 
@@ -28,21 +28,15 @@ wget https://github.com/maravento/blackweb/raw/master/blackweb.tar.gz
 if [ ! -d $route ]; then mkdir -p $route; fi
 tar -C $route -xvzf blackweb.tar.gz
 ```
-Edit /etc/squid3/squid.conf - /etc/squid/squid.conf:
-```
-# INSERT YOUR OWN RULE(S) HERE TO ALLOW ACCESS FROM YOUR CLIENTS
-acl blackweb dstdomain -i "/etc/acl/blackweb.txt"
-http_access deny blackweb
-```
 
-### Modo de uso (actualización)/How to use (Update)
+### Modo de uso (actualización) / How to use (Update)
 
 También puede descargar el proyecto Blackweb y actualizar la ACL blackweb.txt en dependencia de sus necesidades / You can also download the Blackweb project and update the blackweb.txt ACL depending on your needs
 
 ```
 git clone https://github.com/maravento/blackweb.git
 ```
-Copie el script y ejecútelo/Copy the script and run:
+Copie el script y ejecútelo / Copy the script and run:
 ```
 sudo cp -f blackweb/blackweb.sh /etc/init.d
 sudo chown root:root /etc/init.d/blackweb.sh
@@ -54,21 +48,23 @@ Cron task:
 sudo crontab -e
 @weekly /etc/init.d/blackweb.sh
 ```
-Verifique su ejecución/Check execution: /var/log/syslog.log:
+Verifique su ejecución / Check execution: /var/log/syslog.log:
 ```
 Blackweb for Squid: 28/09/2016 15:47:14
 ```
-Descarga incompleta/Incomplete download:
+Descarga incompleta / Incomplete download:
 ```
 Blackweb for Squid: Abort 14/06/2016 16:35:38 Check Internet Connection
 ```
+### Regla / Rule
+
 Edit /etc/squid3/squid.conf - /etc/squid/squid.conf:
 ```
 # INSERT YOUR OWN RULE(S) HERE TO ALLOW ACCESS FROM YOUR CLIENTS
 acl blackweb dstdomain -i "/etc/acl/blackweb.txt"
 http_access deny blackweb
 ```
-### Edición/Edit
+### Edición / Edition
 
 Blackweb contiene millones de dominios bloqueados, por tanto, editarla manualmente puede ser frustrante. Entonces, si detecta un falso positivo, utilice la ACL "whitedomains" y reporte el incidente, para corregirlo en la próxima actualización. Lo mismo aplica para dominios no incluidos en Blackweb, que quiera bloquear, puede incluirlos en "blackdomains" / Blackweb contains million domains blocked therefore manually editing can be frustrating. Then, if it detects a false positive, use the ACL "whitedomains" and report the incident to correct it in the next update. The same applies for domains not included in Blackweb, you want to block, you can include them in "blackdomains"
 
@@ -80,16 +76,12 @@ http_access allow whitedomains
 http_access deny blackdomains 
 http_access deny blackweb
 ```
-"Blackdomains" incluye por default algunos dominios no incluidos en Blackweb (e.g. .youtube.com .googlevideo.com, .ytimg.com) y "whitedomains" incluye el subdominio accounts.youtube.com [desde Feb 2014, Google utiliza el subdominio accounts.youtube.com para autenticar sus servicios] (http://wiki.squid-cache.org/ConfigExamples/Streams/YouTube) / "Blackdomains" by default includes some domains not included in Blackweb (eg .youtube.com .googlevideo.com, .ytimg.com) and "whitedomains" includes the subdomain accounts.youtube.com [since February 2014, Google uses the accounts subdomain .youtube.com to authenticate their services] (http://wiki.squid-cache.org/ConfigExamples/Streams/YouTube).
-
 ### Important
 
+- "Blackdomains" incluye por default algunos dominios no incluidos en Blackweb (e.g. .youtube.com .googlevideo.com, .ytimg.com) y "whitedomains" incluye el subdominio accounts.youtube.com [desde Feb 2014, Google utiliza el subdominio accounts.youtube.com para autenticar sus servicios] (http://wiki.squid-cache.org/ConfigExamples/Streams/YouTube) / "Blackdomains" by default includes some domains not included in Blackweb (eg .youtube.com .googlevideo.com, .ytimg.com) and "whitedomains" includes the subdomain accounts.youtube.com [since February 2014, Google uses the accounts subdomain .youtube.com to authenticate their services] (http://wiki.squid-cache.org/ConfigExamples/Streams/YouTube).
 - Por defecto, la ruta de blackweb es **/etc/acl** y del script **/etc/init.d** / By default, blackweb path is **/etc/acl** and the script **/etc/init.d**
 - Blackweb está diseñada exclusivamente para bloquear dominios. Para los interesados en bloquear banners y otras modalidades publicitarias, visite el foro [Alterserv] (http://www.alterserv.com/foros/index.php?topic=1428.0) / Blackweb is designed exclusively to block domains. For those interested in blocking banners and other advertising forms, visit the [Alterserv] (http://www.alterserv.com/foros/index.php?topic=1428.0) forum.
-
-### Contributions
-
-Los interesados pueden contribuir, enviándonos enlaces de nuevas BLs, para ser incluidas en este proyecto / Those interested may contribute sending us new BLs links to be included in this project
+- Los interesados pueden contribuir, enviándonos enlaces de nuevas BLs, para ser incluidas en este proyecto / Those interested may contribute sending us new BLs links to be included in this project
 
 ### Data sheet
 
